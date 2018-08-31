@@ -1,15 +1,10 @@
 'use strict';
 
-module.exports = function (client, stanzas, config) {
-
+module.exports = (client, stanzas, config) => {
   const sendReceipts =  config.sendReceipts !== false;
 
   client.on('message', (msg) => {
-    const ackTypes = {
-      groupchat: true,
-    };
-    
-    if (sendReceipts && ackTypes[msg.type] && msg.requestReceipt && !msg.receipt) {
+    if (sendReceipts && msg.type === 'groupchat' && msg.requestReceipt && !msg.receipt) {
       client.sendMessage({
         to: msg.from.bare,
         type: msg.type,
@@ -17,6 +12,7 @@ module.exports = function (client, stanzas, config) {
         id: msg.id
       });
     }
+
     if (msg.receipt) {
       client.emit('receipt', msg);
       client.emit('receipt:' + msg.receipt);
