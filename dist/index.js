@@ -1,0 +1,1 @@
+'use strict';module.exports=function(client,stanzas,config){var sendReceipts=config.sendReceipts!==false;client.on('message',function(msg){if(sendReceipts&&msg.type==='groupchat'&&msg.requestReceipt&&!msg.receipt){client.sendMessage({to:msg.from.bare,type:msg.type,receipt:msg.id,id:msg.id})}if(msg.receipt){client.emit('receipt',msg);client.emit('receipt:'+msg.receipt)}})};
